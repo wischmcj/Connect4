@@ -1,4 +1,7 @@
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
@@ -44,27 +47,44 @@ public class Board
   }
   //======================================================================================== GAME PLAY METHOD
   public static void saveGame() throws FileNotFoundException, UnsupportedEncodingException {
-	  PrintWriter writer = new PrintWriter("save.txt", "UTF-8");
-	  for(int i=0; i< 6;i++) {
-		  for(int j=5; j> 0;i--) {
-			 writer.print(board[i][j]);
-		  }
+	  try
+	    {
+	      FileWriter saveWriter = new FileWriter(new File("saveGame.txt"));
+	      for (int column = 0; column < 7; column++)
+	      {
+	        for (int row = 0; row < 6; row++)
+	        {
+	          saveWriter.write(board[column][row] + "\n");;
+	        }
+	      }
+	      saveWriter.close();
+	    }
+	    catch (IOException e)
+	    {
+	      System.out.println(e);
+	    }
+	    return;
 	  }
-	  	
-	  writer.close();
-  }
   public static void loadGame() throws FileNotFoundException, UnsupportedEncodingException {
-	  Scanner scanner = new Scanner("save.txt");
-	  for(int i=0; i< 6;i++) {
-		  for(int j=5; j> 0;i--) {
-			  if(scanner.hasNextInt()) {
-				  board[i][j] = scanner.nextInt();
-			  }
-			  else {/*Do nothing */}
-		  }
-	  }
-	  	
-	  scanner.close();
+	  Scanner scanner;
+	    try
+	    {
+	      scanner = new Scanner(new File("saveGame.txt"));
+	      while (scanner.hasNextInt())
+	      {
+	        for (int column = 0; column < 7; column++)
+	        {
+	          for (int row = 0; row < 6; row++)
+	          {
+	            board[column][row] = scanner.nextInt();
+	          }
+	        }
+	      }
+	      scanner.close();
+	    } catch (FileNotFoundException e)
+	    {
+	      System.out.println(e);
+	    }
   }
  
   //======================================================================================== GAME PLAY METHODS

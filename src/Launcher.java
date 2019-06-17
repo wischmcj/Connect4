@@ -481,36 +481,45 @@ public class Launcher
     btnSaveGame.setFont(new Font("Roboto", Font.PLAIN, 18));
     btnSaveGame.setBounds(24, 24, 240, 40);
     btnSaveGame.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e) {
-    	  if(btnLoadGame.isSelected()) {
-    	  try {
-			Board.saveGame();
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
-    	  }
-      }
-      });
-    subMenuPanel.add(btnSaveGame);
+         {
+           public void actionPerformed(ActionEvent e)
+           {
+             if (Board.winner == 0)
+             {  
+               try {
+				Board.saveGame();
+               		} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+				System.out.println("Error when saving game");
+			}
+             }
+             toggleMenu.setSelected(false);
+             subMenuPanel.setVisible(false);
+           }
+         });
+     subMenuPanel.add(btnSaveGame);
+
 
 
     btnLoadGame.setFont(new Font("Roboto", Font.PLAIN, 18));
     btnLoadGame.setBounds(24, 88, 240, 40);
-    toggleMenu.addActionListener(new ActionListener() 
+    btnLoadGame.addActionListener(new ActionListener()
     {
-      public void actionPerformed(ActionEvent e) {
-    	  if(btnLoadGame.isSelected()) {
-    	  try {
+      public void actionPerformed(ActionEvent e)
+      {
+        try {
 			Board.loadGame();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
-    	  }
+        Board.winner = 0;
+        updateWinnerDisplay();
+        toggleMenu.setSelected(false);
+        subMenuPanel.setVisible(false);
       }
     });
     subMenuPanel.add(btnLoadGame);
