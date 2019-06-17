@@ -1,3 +1,7 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Scanner;
 
 public class Board
 {
@@ -38,8 +42,32 @@ public class Board
       }
     }
   }
-
-  //========================================================================================  METHODS
+  //======================================================================================== GAME PLAY METHOD
+  public static void saveGame() throws FileNotFoundException, UnsupportedEncodingException {
+	  PrintWriter writer = new PrintWriter("save.txt", "UTF-8");
+	  for(int i=0; i< 6;i++) {
+		  for(int j=5; j> 0;i--) {
+			 writer.print(board[i][j]);
+		  }
+	  }
+	  	
+	  writer.close();
+  }
+  public static void loadGame() throws FileNotFoundException, UnsupportedEncodingException {
+	  Scanner scanner = new Scanner("save.txt");
+	  for(int i=0; i< 6;i++) {
+		  for(int j=5; j> 0;i--) {
+			  if(scanner.hasNextInt()) {
+				  board[i][j] = scanner.nextInt();
+			  }
+			  else {/*Do nothing */}
+		  }
+	  }
+	  	
+	  scanner.close();
+  }
+ 
+  //======================================================================================== GAME PLAY METHODS
 
   //  Add a chip to the lowest open cell in the specified column.
   public static void addChip(int column, int chip)

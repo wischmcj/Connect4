@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 import javax.swing.JPanel;
@@ -62,7 +64,7 @@ public class Launcher
   //  Toggle Menu
   JPanel subMenuPanel = new JPanel();
   JButton btnSaveGame = new JButton("Save Game");
-  JButton btnNewButton = new JButton("Load Saved Game");
+  JButton btnLoadGame = new JButton("Load Saved Game");
   JButton btnExitToMenu = new JButton("Exit to Menu");
   JLabel menuNoticeLabel = new JLabel("(This will save your game.)");
 
@@ -134,9 +136,6 @@ public class Launcher
    */
   public static void main(String[] args)
   {
-	  System.out.println("sdfdf");
-	  System.out.print( Launcher.class.getResource("src/images/chip_red_scaled3.png"));
-	  System.out.println("sdfdf");
 	  EventQueue.invokeLater(new Runnable()
     {
       public void run()
@@ -481,15 +480,43 @@ public class Launcher
 
     btnSaveGame.setFont(new Font("Roboto", Font.PLAIN, 18));
     btnSaveGame.setBounds(24, 24, 240, 40);
+    btnSaveGame.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e) {
+    	  if(btnLoadGame.isSelected()) {
+    	  try {
+			Board.saveGame();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+    	  }
+      }
+      });
     subMenuPanel.add(btnSaveGame);
 
 
-    btnNewButton.setFont(new Font("Roboto", Font.PLAIN, 18));
-    btnNewButton.setBounds(24, 88, 240, 40);
-    subMenuPanel.add(btnNewButton);
+    btnLoadGame.setFont(new Font("Roboto", Font.PLAIN, 18));
+    btnLoadGame.setBounds(24, 88, 240, 40);
+    toggleMenu.addActionListener(new ActionListener() 
+    {
+      public void actionPerformed(ActionEvent e) {
+    	  if(btnLoadGame.isSelected()) {
+    	  try {
+			Board.loadGame();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+    	  }
+      }
+    });
+    subMenuPanel.add(btnLoadGame);
+    
 
 
-    btnExitToMenu.setBounds(24, 152, 240, 40);
     subMenuPanel.add(btnExitToMenu);
 
 
