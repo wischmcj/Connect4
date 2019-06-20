@@ -67,7 +67,7 @@ public class Launcher
   JButton btnLoadGame = new JButton("Load Saved Game");
   JButton btnExitToMenu = new JButton("Exit to Menu");
   JLabel menuNoticeLabel = new JLabel("(This will save your game.)");
-
+  JButton btnReset = new JButton("Reset");
   //  Winner Overlay
   JLabel winnerDisplayLabel = new JLabel("");
 
@@ -204,6 +204,10 @@ public class Launcher
       public void actionPerformed(ActionEvent e) {
         launcherFrame.setVisible(false);
         gameFrame.setVisible(true);
+        Board.winner = 0;
+        Board.clear();
+        updateWinnerDisplay();
+      
       }
     });
 
@@ -357,7 +361,7 @@ public class Launcher
 
     JButton requirementsBackButton = new JButton("");
     requirementsBackButton.setIcon(new ImageIcon(
-        Launcher.class.getResource("/src/images/arrow_back.png")));
+    Launcher.class.getResource("/src/images/arrow_back.png")));
     requirementsBackButton.setBackground(new Color(245, 245, 245));
     requirementsBackButton.setBounds(8, 8, 48, 48);
     requirementsBackButton.addActionListener(new ActionListener() 
@@ -374,12 +378,11 @@ public class Launcher
     requirementsPanel.add(requirementsBackButton);
 
     //==========================  LAUNCHER FRAME : CREDITS PANEL  ============================//
-
     creditsPanel.setBounds(0, 0, 595, 360);
     launcherFrame.getContentPane().add(creditsPanel);
     creditsPanel.setLayout(null);
     creditsPanel.setBackground(new Color(250, 250, 250));
-
+    
     JLabel creditsTitleLabel = new JLabel();
     creditsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     creditsTitleLabel.setText("Developer Credits");
@@ -394,7 +397,7 @@ public class Launcher
 
     JLabel collinTitlesLabel = new JLabel();
     collinTitlesLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    collinTitlesLabel.setText("Team Leader");
+    collinTitlesLabel.setText("Team Leader, Computer Player Head Developer");
     collinTitlesLabel.setFont(new Font("Roboto-Regular.ttf", Font.PLAIN, 18));
     collinTitlesLabel.setVerticalAlignment(SwingConstants.TOP);
     collinTitlesLabel.setBounds(0, 96, 595, 40);
@@ -420,7 +423,7 @@ public class Launcher
 
     JLabel benTitlesLabel = new JLabel();
     benTitlesLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    benTitlesLabel.setText("");
+    benTitlesLabel.setText("Documentation Officer");
     benTitlesLabel.setFont(new Font("Roboto-Regular.ttf", Font.PLAIN, 18));
     benTitlesLabel.setBounds(0, 240, 595, 40);
 
@@ -432,13 +435,13 @@ public class Launcher
 
     JLabel erikTitlesLabel = new JLabel();
     erikTitlesLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    erikTitlesLabel.setText("");
+    erikTitlesLabel.setText("Software Quality Assurance Officer");
     erikTitlesLabel.setFont(new Font("Roboto-Regular.ttf", Font.PLAIN, 18));
     erikTitlesLabel.setBounds(0, 312, 595, 40);    
 
     JButton creditsBackButton = new JButton("");
     creditsBackButton.setIcon(new ImageIcon(
-        Launcher.class.getResource("/src/images/arrow_back.png")));
+        Launcher.class.getResource("src/images/arrow_back.png")));
     creditsBackButton.setBackground(new Color(245, 245, 245));
     creditsBackButton.setBounds(8, 8, 48, 48);
     creditsBackButton.addActionListener(new ActionListener() 
@@ -448,6 +451,7 @@ public class Launcher
         menuPanel.setVisible(true);
       }
     });
+
 
     creditsPanel.add(creditsTitleLabel);
     creditsPanel.add(collinNameLabel);
@@ -557,7 +561,6 @@ public class Launcher
     subMenuPanel.add(menuNoticeLabel);
 
 
-
     toggleMenu.setIcon(new ImageIcon(Launcher.class.getResource("/src/images/icon_menu.png")));
     toggleMenu.setBounds(26, 26, 48, 48);
     toggleMenu.addActionListener(new ActionListener() 
@@ -568,6 +571,28 @@ public class Launcher
     });
     gameFrame.getContentPane().add(toggleMenu);
 
+    btnReset.setFont(new Font("Roboto", Font.PLAIN, 18));
+    btnReset.setBounds(26, 300, 240, 40);
+    btnReset.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+    	if(!Board.isEmpty()) {
+    		Board.winner=0 ;
+	        Board.clear();
+	        updateChips();
+    	}    
+    	else {
+    		assert true;
+    	}
+        toggleMenu.setSelected(false);
+        subMenuPanel.setVisible(false);
+        //winnerDisplayLabel.setVisible(false);
+        updateWinnerDisplay();
+      }
+    });
+    gameFrame.add(btnReset);    
+    
     winnerDisplayLabel.setIcon(null);
     winnerDisplayLabel.setBounds(0, 100, 1000, 700);
     gameFrame.getContentPane().add(winnerDisplayLabel);

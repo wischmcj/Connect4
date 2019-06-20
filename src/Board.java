@@ -116,6 +116,23 @@ public class Board
     winner = winCheck();
   }
 
+  public static boolean  isEmpty() {
+	  for (int column = 0; column < 7; column++)
+      {
+        for (int row = 0; row < 6; row++)
+        {
+        	if(board[column][row]==0) {
+        		assert true;
+        	}
+        	else {
+        		return false;
+        	}
+        
+        }
+      }
+	  return true;
+	  
+  }
   public static boolean columnIsFull(int column)
   {
     return isFull[column];
