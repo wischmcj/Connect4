@@ -289,6 +289,15 @@ public class Board
     }
     return ret;
   }
-
+  public static void clear()
+  {
+    for (int column = 0; column < 7; column++)
+    {
+      for (int row = 0; row < 6; row++)
+      {
+        board[column][row] = 0;
+      }
+    }
+  }
 
 }

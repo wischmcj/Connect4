@@ -525,7 +525,29 @@ public class Launcher
     subMenuPanel.add(btnLoadGame);
     
 
-
+    btnExitToMenu.setFont(new Font("Roboto", Font.PLAIN, 18));
+    btnExitToMenu.setBounds(24, 152, 240, 40);
+    btnExitToMenu.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        if (Board.winner == 0)
+        {
+          try {
+			Board.saveGame();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+        }
+        Board.winner = 0;
+        gameFrame.setVisible(false);
+        launcherFrame.setVisible(true);
+        toggleMenu.setSelected(false);
+        subMenuPanel.setVisible(false);
+      }
+    });
     subMenuPanel.add(btnExitToMenu);
 
 
