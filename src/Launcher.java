@@ -1,4 +1,5 @@
 
+
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -16,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
@@ -60,6 +62,7 @@ public class Launcher
   JToggleButton toggleMenu = new JToggleButton("");
   JLabel winCounter = new JLabel();
   public static int wins = 0;
+  public static int losses = 0;
 
   //  Toggle Menu
   JPanel subMenuPanel = new JPanel();
@@ -67,7 +70,7 @@ public class Launcher
   JButton btnLoadGame = new JButton("Load Saved Game");
   JButton btnExitToMenu = new JButton("Exit to Menu");
   JLabel menuNoticeLabel = new JLabel("(This will save your game.)");
-  JButton btnReset = new JButton("Reset");
+  JButton btnRestart = new JButton("Restart");
   //  Winner Overlay
   JLabel winnerDisplayLabel = new JLabel("");
 
@@ -289,28 +292,58 @@ public class Launcher
     slider.setMajorTickSpacing(1);
     slider.setMaximum(2);
     slider.setPaintTicks(true);
-    slider.setBounds(200, 250, 200, 30);
+    slider.setBounds(200, 150, 200, 30);
 
     JLabel lblNewSettingsLabel = new JLabel("AI Difficulty");
     lblNewSettingsLabel.setHorizontalAlignment(SwingConstants.CENTER);
     lblNewSettingsLabel.setFont(new Font("Roboto-Regular.tff", Font.PLAIN, 18));
-    lblNewSettingsLabel.setBounds(200, 210, 200, 40);
+    lblNewSettingsLabel.setBounds(200, 110, 200, 40);
 
     JLabel lblNewLabel_1 = new JLabel("Easy");
     lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
     lblNewLabel_1.setFont(new Font("Roboto-Regular.ttf", Font.PLAIN, 12));
-    lblNewLabel_1.setBounds(190, 280, 40, 20);
+    lblNewLabel_1.setBounds(190, 180, 40, 20);
 
     JLabel lblMedium = new JLabel("Medium");
     lblMedium.setHorizontalAlignment(SwingConstants.CENTER);
     lblMedium.setFont(new Font("Roboto-Regular.ttf", Font.PLAIN, 12));
-    lblMedium.setBounds(270, 280, 60, 20);
+    lblMedium.setBounds(270, 180, 60, 20);
 
     JLabel lblHard = new JLabel("Hard");
     lblHard.setHorizontalAlignment(SwingConstants.CENTER);
     lblHard.setFont(new Font("Roboto-Regular.ttf", Font.PLAIN, 12));
-    lblHard.setBounds(370, 280, 40, 20);
+    lblHard.setBounds(370, 180, 40, 20);
 
+    JButton resetBtn = new JButton("Reset Statistics");
+    resetBtn.setBackground(new Color(245,245,245));
+   resetBtn.setFont(new Font("ROboto-Regular.ttf",Font.PLAIN,12));
+   resetBtn.setBounds(180,240,240,40);
+   resetBtn.addActionListener( new ActionListener() 
+   {
+	   @SuppressWarnings("deprecation")
+	public void actionPerformed(ActionEvent e){
+		   wins =0;
+		   losses = 0;
+		   try {
+			   FileWriter winsWriter= new FileWriter(new File("winCount.txt"));
+			   winsWriter.write(new Integer(wins).toString() + " ");
+			   winsWriter.write(new Integer(losses).toString() + " ");
+			   winsWriter.close();
+			   
+		   }
+		   catch(Exception ex) {
+			   ex.printStackTrace();
+		   }
+		   if(wins+losses != 0) {
+			   winCounter.setText("Wins: " + wins + " Losses: "+ losses+ "    Win Percentage: "+ (wins/wins+losses)*100 +"%");
+		   }
+		   else {
+			   winCounter.setText("Wins: " + wins + " Losses: "+ losses+ "    Win Percentage: 0%");
+		   }
+	}
+   });
+   
+    
     JButton settingsBackButton = new JButton("");
     settingsBackButton.setIcon(new ImageIcon(Launcher.class.getResource("src/images/arrow_back.png")));
     settingsBackButton.setBackground(new Color(245, 245, 245));
@@ -322,7 +355,7 @@ public class Launcher
         menuPanel.setVisible(true);
       }
     });
-
+    settingsPanel.add(resetBtn);
     settingsPanel.add(chckbxPlayAsRed);
     settingsPanel.add(slider);
     settingsPanel.add(lblNewSettingsLabel);
@@ -555,6 +588,27 @@ public class Launcher
     subMenuPanel.add(btnExitToMenu);
 
 
+    btnRestart.setFont(new Font("Roboto", Font.PLAIN, 18));
+    btnRestart.setBounds(24, 234, 240, 40);
+    btnRestart.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+    	if(!Board.isEmpty()) {
+    		Board.winner=0 ;
+	        Board.clear();
+	        updateChips();
+    	}    
+    	else {
+    		assert true;
+    	}
+        toggleMenu.setSelected(false);
+        subMenuPanel.setVisible(false);
+        updateWinnerDisplay();
+      }
+    });
+    subMenuPanel.add(btnRestart);    
+
     menuNoticeLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
     menuNoticeLabel.setHorizontalAlignment(SwingConstants.CENTER);
     menuNoticeLabel.setBounds(24, 198, 240, 20);
@@ -569,29 +623,7 @@ public class Launcher
         subMenuPanel.setVisible(toggleMenu.isSelected());
       }
     });
-    gameFrame.getContentPane().add(toggleMenu);
-
-    btnReset.setFont(new Font("Roboto", Font.PLAIN, 18));
-    btnReset.setBounds(26, 300, 240, 40);
-    btnReset.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-    	if(!Board.isEmpty()) {
-    		Board.winner=0 ;
-	        Board.clear();
-	        updateChips();
-    	}    
-    	else {
-    		assert true;
-    	}
-        toggleMenu.setSelected(false);
-        subMenuPanel.setVisible(false);
-        //winnerDisplayLabel.setVisible(false);
-        updateWinnerDisplay();
-      }
-    });
-    gameFrame.add(btnReset);    
+    gameFrame.getContentPane().add(toggleMenu); 
     
     winnerDisplayLabel.setIcon(null);
     winnerDisplayLabel.setBounds(0, 100, 1000, 700);
@@ -806,7 +838,7 @@ public class Launcher
     chip_6_3.setBounds(752, 385, 84, 84);
     gameFrame.getContentPane().add(chip_6_3);
 
-    winCounter.setText("Wins: " + wins);
+    winCounter.setText("Wins: " + wins + " Losses: " + losses +  "    Win Percentage: "+ ((wins+losses>0)?(wins/wins+losses)*100:0) +"%");
     winCounter.setHorizontalAlignment(SwingConstants.CENTER);
     winCounter.setForeground(Color.BLACK);
     winCounter.setFont(new Font("Roboto", Font.PLAIN, 38));
@@ -1282,7 +1314,19 @@ public class Launcher
     {
       wins++;
     }
+    else if(Board.winner == 2){
+    	losses++;
+    }
     return;
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
 }
