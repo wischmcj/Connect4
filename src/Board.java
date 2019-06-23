@@ -200,11 +200,11 @@ public class Board
 
   //Checks to see if the player or opponent has won.
   //returns 0 if neither player has won
-  //returns 1 or 2 if someone has one
+  //returns 1 or 2 if someone has won
   public static int winCheck()
   {
     int ret = 0;
-    //  check columns
+    //check columns
     int row = 0;
     int column = 0;
     int count = 1;

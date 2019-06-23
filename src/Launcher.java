@@ -335,7 +335,7 @@ public class Launcher
 			   ex.printStackTrace();
 		   }
 		   if(wins+losses != 0) {
-			   winCounter.setText("Wins: " + wins + " Losses: "+ losses+ "    Win Percentage: "+ (wins/wins+losses)*100 +"%");
+			   winCounter.setText("Wins: " + wins + " Losses: "+ losses+ "    Win Percentage: "+ (wins/(wins+losses))*100 +"%");
 		   }
 		   else {
 			   winCounter.setText("Wins: " + wins + " Losses: "+ losses+ "    Win Percentage: 0%");
@@ -598,6 +598,7 @@ public class Launcher
     		Board.winner=0 ;
 	        Board.clear();
 	        updateChips();
+	        Board.isFull = new boolean[7];
     	}    
     	else {
     		assert true;
@@ -838,7 +839,7 @@ public class Launcher
     chip_6_3.setBounds(752, 385, 84, 84);
     gameFrame.getContentPane().add(chip_6_3);
 
-    winCounter.setText("Wins: " + wins + " Losses: " + losses +  "    Win Percentage: "+ ((wins+losses>0)?(wins/wins+losses)*100:0) +"%");
+    winCounter.setText("Wins: " + wins + " Losses: " + losses +  "    Win Percentage: "+ ((wins+losses>0)?(wins/(wins+losses))*100:0) +"%");
     winCounter.setHorizontalAlignment(SwingConstants.CENTER);
     winCounter.setForeground(Color.BLACK);
     winCounter.setFont(new Font("Roboto", Font.PLAIN, 38));
@@ -1260,14 +1261,22 @@ public class Launcher
       winnerDisplayLabel.setIcon(
           new ImageIcon(Launcher.class.getResource("/src/images/victory.png")));
       winnerDisplayLabel.setVisible(true);
+      wins++;
     }
     else if (Board.winner == 2)
     {
       winnerDisplayLabel.setIcon(
           new ImageIcon(Launcher.class.getResource("/src/images/defeat.png")));
       winnerDisplayLabel.setVisible(true);
+      losses++;
     }
-    if (Board.winner == 1) winCounter.setText("Wins: 1");
+
+    if(wins+losses> 0) {
+    	winCounter.setText("Wins: " + wins + " Losses: "+ losses+ "    Win Percentage: "+ (wins/(wins+losses))*100 +"%");
+    }
+    else {
+ 	   winCounter.setText("Wins: " + wins + " Losses: "+ losses+ "    Win Percentage: 0%");
+    }
   }
 
   public void updateBoard()
@@ -1296,27 +1305,16 @@ public class Launcher
       Board.winCheck();
       updateBoard();
       if (Board.winner != 0) return;
-//      Board.moveColumnSelectionRight();
-//      Board.addChip(Board.columnSelection, 2);
-//      Board.moveColumnSelectionLeft();
       int i = ComputerPlayer.playTile(Board.columnSelection);
       System.out.println("Computer Choice: " + i);
       Board.addChip(i, 2);
-      if (Board.columnIsFull(Board.columnSelection))
-      {
-        Board.moveColumnSelectionRight();
-      }
+     // if (Board.columnIsFull(Board.columnSelection))
+     //{
+      //  Board.moveColumnSelectionRight();
+      //}
 
     }
-
     updateBoard();
-    if (Board.winner == 1)
-    {
-      wins++;
-    }
-    else if(Board.winner == 2){
-    	losses++;
-    }
     return;
   }
   
